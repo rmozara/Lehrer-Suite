@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}Lehreroberfläche{% endblock %}
+{% block content %}
+<header class="admin-header workbook-header">
+  <div>
+    <div class="eyebrow">Lokale Verwaltung</div>
+    <h1>SE</h1>
+    <p class="subtitle">Selbstevaluation · Version {{ version }}</p>
+    <p class="muted"><strong>Arbeitsordner</strong><code class="path-block">{{ work_dir }}</code></p>
+  </div>
+  <div class="header-tools">
+  <details class="password-settings">
+    <summary class="button secondary">Lehrerpasswort ändern</summary>
+    <div class="password-settings-form">
+      <p class="muted">Das Passwort wird nicht lesbar gespeichert. Es muss mindestens 10 Zeichen lang sein.</p>
+      <form method="post" action="/admin/settings/password">
+        <label for="current_password">Bisheriges Passwort</label>
+        <input id="current_password" name="current_password" type="password" autocomplete="current-password" required>
+        <label for="new_password">Neues Passwort</label>
+        <input id="new_password" name="new_password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required>
+        <label for="new_password_repeat">Neues Passwort wiederholen</label>
+        <input id="new_password_repeat" name="new_password_repeat" type="password" autocomplete="new-password" minlength="10" maxlength="128" required>
+        <div class="form-actions"><button class="button primary" type="submit">Passwort ändern</button></div>
+      </form>
+    </div>
+  </details>
+  <form method="post" action="/admin/shutdown">
+    <button class="button danger" type="submit">SE beenden</button>
+  </form>
+  </div>
+</header>
+{% if message %}<div class="alert info">{{ message }}</div>{% endif %}
+{% if ods_error %}<div class="alert info"><strong>Arbeitsordner noch nicht vorbereitet.</strong>
+  <p><strong>Arbeitsdatei</strong><code class="path-block">{{ ods_path }}</code></p>
+  <p>Öffne diese Datei, trage im Blatt „Namensliste“ die aktiven Schülerinnen und Schüler und im Blatt „Parameter“ das Fach ein und speichere sie.</p>
+  <span class="muted">Hinweis: {{ ods_error }}</span>
+  <form method="post" action="/admin/sync-ods" class="form-actions"><button class="button primary" type="submit">Datei erneut prüfen</button></form>
+</div>{% endif %}
+
+<div class="admin-grid">
+  <section class="panel panel-yellow">
+    <h2>1. Namensliste</h2>
+    <p><strong>Datei:</strong> <code>Selbstevaluation.ods</code></p>
+    {% if roster %}
+      <p><strong>Klasse:</strong> {{ roster.class_id }}<br><strong>Aktive SuS:</strong> {{ roster.students|length }}</p>
+      <p class="muted">Nr., Name und Schüler-ID werden direkt aus dem Blatt „Namensliste“ gelesen.</p>
+    {% else %}
+      <p>Noch keine ausgefüllte Namensliste geladen.</p>
+    {% endif %}
+    <form method="post" action="/admin/sync-ods">
+      <div class="form-actions"><button class="button" type="submit">Namensliste neu laden</button></div>
+    </form>
+    <p><a class="button secondary" href="/admin/download-ods">Selbstevaluation.ods herunterladen</a></p>
+  </section>
+
+  <section class="panel panel-green">
+    <h2>2. Direktmodus</h2>
+    <p class="muted">Normalbetrieb: persönliche QR-Karte scannen und anschließend den Sitzungscode eingeben.</p>
+
+    {% if settings.direct_mode_enabled %}
+      <div class="alert success direct-mode-status">
+        <strong>Direktmodus aktiviert</strong><br>
+        Verwendete Adresse: <code class="address-code">{{ settings.direct_base_url }}</code>
+      </div>
+    {% else %}
+      <div class="alert info direct-mode-status">
+        <strong>Direktmodus deaktiviert</strong><br>
+        Bitte unten eine Adresse auswählen und übernehmen.
+      </div>
+    {% endif %}
+
+    {% if detected_addresses %}
+      <form method="post" action="/admin/settings/direct-url" class="network-form">
+        <p><strong>Verfügbare Adressen</strong></p>
+        <p class="muted">Die Auswahl gilt erst, nachdem du sie mit dem Button übernommen hast.</p>
+        <div class="network-options">
+          {% for address in detected_addresses %}
+            <label class="network-option">
+              <input type="radio" name="direct_base_url" value="{{ address.url }}"
+                {% if settings.direct_base_url == address.url or (not settings.direct_base_url and address.recommended) %}checked{% endif %}>
+              <span class="network-option-text">
+                <strong>{{ address.url }}</strong>
+                {% if address.recommended %}<span class="badge active">empfohlen</span>{% endif %}
+                {% if settings.direct_base_url == address.url %}<span class="badge">aktuell verwendet</span>{% endif %}
+                <small>{{ address.interface }}</small>
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+        <p class="muted">Die in QR verwendete Adresse wird automatisch übernommen. Nur bei einer bewussten Änderung hier eine andere Adresse wählen.</p>
+        <button class="button" type="submit">Diese Adresse für den Direktmodus verwenden</button>
+      </form>
+    {% else %}
+      <div class="alert info">Keine geeignete lokale Netzwerkadresse erkannt. Bitte zuerst mit dem vorgesehenen WLAN verbinden.</div>
+    {% endif %}
+
+    {% if settings.direct_mode_enabled %}
+      <form method="post" action="/admin/settings/direct-url">
+        <input type="hidden" name="direct_base_url" value="">
+        <button class="button secondary" type="submit">Direktmodus deaktivieren</button>
+      </form>
+    {% endif %}
+
+    <details>
+      <summary>Andere Adresse manuell eintragen</summary>
+      <form method="post" action="/admin/settings/direct-url" class="network-form">
+        <label for="direct_base_url_manual">Grundadresse</label>
+        <input id="direct_base_url_manual" name="direct_base_url" value="{{ settings.direct_base_url }}" placeholder="z. B. http://192.168.50.10:8765">
+        <button class="button" type="submit">Manuelle Adresse speichern</button>
+      </form>
+    </details>
+
+    <details>
+      <summary>WLAN-QR-Code für den Klassenraum</summary>
+      <p><strong>SSID:</strong> {{ settings.wifi_ssid }}</p>
+      <img class="qr-small" src="/admin/qr/wifi.png" alt="WLAN-QR-Code">
+    </details>
+
+    <p class="muted"><strong>Ausweichweg:</strong> Nach dem Öffnen der Sitzung kann auf der nächsten Seite jederzeit der Zwei-QR-Modus angezeigt werden.</p>
+</section>
+
+<section class="panel">
+    <h2>3. QR-Karte anzeigen</h2>
+    <p class="muted">Falls eine persönliche QR-Karte vergessen wurde, kann sie hier nach Auswahl der Person zum Scannen angezeigt werden. Neue QR-Karten werden ausschließlich in QR erzeugt.</p>
+    {% for class_id in classes %}<p><a class="button secondary" href="/admin/cards/{{ class_id }}">QR-Karte anzeigen · {{ class_id }}</a></p>{% endfor %}
+    {% if not classes %}<p class="muted">Nach dem Laden der Namensliste erscheint hier die Scanansicht.</p>{% endif %}
+  </section>
+
+  <section class="panel panel-green">
+    <h2>4. Sitzung öffnen</h2>
+    {% if classes %}
+    <p class="muted">Nach dem Öffnen erscheint der sechsstellige Sitzungscode. Die SuS scannen ihre persönliche QR-Karte und geben anschließend diesen Code ein.</p>
+    <form method="post" action="/admin/session/start">
+      <label for="class_id">Klasse</label>
+      <select id="class_id" name="class_id" required>
+        {% for class_id in classes %}<option value="{{ class_id }}">{{ class_id }}</option>{% endfor %}
+      </select>
+      <label for="period_id">Erhebungszeitraum</label>
+      <input id="period_id" name="period_id" placeholder="z. B. Q1 2026/27" required>
+      <div class="form-actions"><button class="button primary" type="submit">Sitzung öffnen</button></div>
+    </form>
+    <p class="muted">Für dieselbe Klasse und denselben Zeitraum wird dieselbe Sitzung wieder geöffnet.</p>
+    <div class="vpn-reminder"><strong>Vor dem Unterricht:</strong> Laptop und Schülergeräte mit demselben WLAN verbinden; VPN auf den Schülergeräten ausschalten.</div>
+    {% else %}<p>Bitte zuerst eine gültige Namensliste aus der ODS-Datei laden.</p>{% endif %}
+  </section>
+</div>
+
+<section class="panel">
+  <h2>Sitzungen</h2>
+  {% if sessions %}
+  <div class="table-wrap">
+    <table class="workbook-table">
+      <thead><tr><th>Klasse</th><th>Zeitraum</th><th>Status</th><th>Abgaben</th><th>Zuletzt geöffnet</th><th></th></tr></thead>
+      <tbody>
+      {% for s in sessions %}
+        <tr>
+          <td>{{ s.class_id }}</td>
+          <td>{{ s.period_id }}</td>
+          <td>{% if s.active %}<span class="badge active">geöffnet</span>{% else %}<span class="badge closed">geschlossen</span>{% endif %}</td>
+          <td>{{ s.submitted }} / {{ s.total }}</td>
+          <td>{{ s.started_at }}</td>
+          <td><div class="form-actions">
+            <a class="button small" href="/admin/session/{{ s.id }}">{% if s.active %}Zur Sitzung{% else %}Ergebnisse ansehen{% endif %}</a>
+            {% if not s.active %}<form method="post" action="/admin/session/{{ s.id }}/archive"><button class="button small secondary" type="submit">Archivieren</button></form>{% endif %}
+          </div></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<p class="muted">Noch keine Sitzung vorhanden.</p>{% endif %}
+</section>
+<section class="panel">
+  <details>
+    <summary><strong>Archivierte Sitzungen</strong></summary>
+    {% if archived_sessions %}
+    <div class="table-wrap"><table class="workbook-table">
+      <thead><tr><th>Klasse</th><th>Zeitraum</th><th>Abgaben</th><th>Aktionen</th></tr></thead><tbody>
+      {% for s in archived_sessions %}<tr>
+        <td>{{ s.class_id }}</td><td>{{ s.period_id }}</td><td>{{ s.submitted }} / {{ s.total }}</td>
+        <td><div class="form-actions">
+          <form method="post" action="/admin/session/{{ s.id }}/restore"><button class="button small" type="submit">Wiederherstellen</button></form>
+          <form method="post" action="/admin/session/{{ s.id }}/delete" onsubmit="return confirm('Diese archivierte Sitzung einschließlich aller Abgaben endgültig löschen?');"><button class="button small danger" type="submit">Endgültig löschen</button></form>
+        </div></td>
+      </tr>{% endfor %}
+      </tbody></table></div>
+    {% else %}<p class="muted">Noch keine archivierte Sitzung.</p>{% endif %}
+  </details>
+</section>
+{% endblock %}

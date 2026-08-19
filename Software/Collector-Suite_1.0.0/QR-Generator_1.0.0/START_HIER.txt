@@ -1,0 +1,24 @@
+QR · QR-KARTEN 1.0.0
+=====================
+
+PROGRAMMORDNER
+Dieser Ordner enthält QR. Unterrichtsdaten nicht hier ablegen.
+
+VORBEREITUNG
+1. Außerhalb der Suite einen persönlichen Arbeitsordner für die Klasse anlegen.
+2. templates/Namensliste.ods unter demselben Namen dorthin kopieren.
+3. Schuljahr, Klasse, Namen und eindeutige Schüler-IDs eintragen.
+
+START
+Linux:  ./run_on_linux.sh
+Windows: run_on_windows.bat doppelklicken
+
+Beim ersten Start im Browser für den Benutzer lehrkraft ein eigenes gemeinsames
+Lehrerpasswort festlegen. Danach Arbeitsordner und Unterrichtsadresse prüfen und
+QR-Karten erzeugen.
+
+ABLAUF DER SUITE
+QR → SE → HB
+
+Ausführliche Hinweise und eine Beispiel-Ordnerstruktur stehen in README.md und
+im zentralen Ordner Beispiel-Durchlauf.

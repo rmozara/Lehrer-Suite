@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Bereits abgegeben{% endblock %}
+{% block content %}
+<section class="panel narrow">
+  <h1>Bereits abgegeben</h1>
+  <p>Für diese Sitzung liegt bereits eine verbindliche Abgabe vor.</p>
+  <p><a class="button primary" href="/done/{{ session.public_token }}/{{ student.public_token }}">Ergebnis anzeigen</a></p>
+  <p class="muted">Eine erneute Abgabe kann nur von der Lehrkraft freigegeben werden.</p>
+</section>
+{% endblock %}

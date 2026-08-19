@@ -1,0 +1,231 @@
+{
+  "form_id": "SE1",
+  "version": "1.0.0",
+  "subject": "Physik",
+  "title": "Mitarbeit im Unterricht",
+  "subtitle": "Selbstbewertung",
+  "intro": "Kreuze jeweils Zutreffendes an. Sei ehrlich und fair dir selbst gegenüber.",
+  "scale": [
+    {
+      "label": "stimmt voll und ganz",
+      "value": 3,
+      "points_label": "3 Punkte"
+    },
+    {
+      "label": "stimmt eher",
+      "value": 2,
+      "points_label": "2 Punkte"
+    },
+    {
+      "label": "stimmt eher nicht",
+      "value": 1,
+      "points_label": "1 Punkt"
+    },
+    {
+      "label": "stimmt nicht",
+      "value": 0,
+      "points_label": "0 Punkte"
+    }
+  ],
+  "sections": [
+    {
+      "id": "muendlich",
+      "title": "Quantität und Qualität meiner mündlichen Mitarbeit",
+      "max_points": 27,
+      "questions": [
+        {
+          "id": "q01",
+          "text": "Ich melde mich oft."
+        },
+        {
+          "id": "q02",
+          "text": "Ich spreche deutlich, laut genug und in vollständigen Sätzen."
+        },
+        {
+          "id": "q03",
+          "text": "Ich passe gut auf und höre zu, wenn andere sprechen."
+        },
+        {
+          "id": "q04",
+          "text": "Ich frage nach, wenn ich etwas nicht verstanden habe."
+        },
+        {
+          "id": "q05",
+          "text": "Ich helfe mit, Fragen meiner Mitschüler zu beantworten."
+        },
+        {
+          "id": "q06",
+          "text": "Meine mündlichen Beiträge sind inhaltlich gut."
+        },
+        {
+          "id": "q07",
+          "text": "Ich verwende die mathematische Fachsprache."
+        },
+        {
+          "id": "q08",
+          "text": "Ich schwatze nicht und rufe nicht dazwischen."
+        },
+        {
+          "id": "q09",
+          "text": "Ich mache Lehrer und Mitschüler/innen auf Fehler aufmerksam."
+        }
+      ]
+    },
+    {
+      "id": "partner",
+      "title": "Partner- und Gruppenarbeit",
+      "max_points": 9,
+      "questions": [
+        {
+          "id": "q10",
+          "text": "Ich bringe eigene Ideen und Vorschläge ein."
+        },
+        {
+          "id": "q11",
+          "text": "Ich helfe mit, dass die Arbeit zügig erledigt wird."
+        },
+        {
+          "id": "q12",
+          "text": "Ich helfe anderen."
+        }
+      ]
+    },
+    {
+      "id": "stillarbeit",
+      "title": "Stillarbeit",
+      "max_points": 12,
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Ich fange zügig mit der Arbeit an."
+        },
+        {
+          "id": "q14",
+          "text": "Ich arbeite ordentlich und gründlich."
+        },
+        {
+          "id": "q15",
+          "text": "Ich mache wenig Fehler."
+        },
+        {
+          "id": "q16",
+          "text": "Ich arbeite schnell."
+        }
+      ]
+    },
+    {
+      "id": "voraussetzungen",
+      "title": "Voraussetzungen für meine Mitarbeit und die Mitarbeit anderer",
+      "max_points": 18,
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Ich erledige meine Hausaufgaben vollständig und ordentlich."
+        },
+        {
+          "id": "q18",
+          "text": "Ich habe den Stoff der letzten Stunde immer präsent."
+        },
+        {
+          "id": "q19",
+          "text": "Ich habe mein Arbeitsmaterial immer vollständig dabei."
+        },
+        {
+          "id": "q20",
+          "text": "Ich führe meinen Hefter/mein Heft vollständig und ordentlich."
+        },
+        {
+          "id": "q21",
+          "text": "Ich lenke meine Mitschüler/innen nicht vom Unterricht ab."
+        },
+        {
+          "id": "q22",
+          "text": "Insgesamt strenge ich mich im Unterricht sehr an."
+        }
+      ]
+    }
+  ],
+  "max_points": 66,
+  "grade_thresholds": [
+    {
+      "min_points": 63,
+      "grade_label": "1+",
+      "grade_value": 0.7
+    },
+    {
+      "min_points": 60,
+      "grade_label": "1",
+      "grade_value": 1.0
+    },
+    {
+      "min_points": 57,
+      "grade_label": "1-",
+      "grade_value": 1.3
+    },
+    {
+      "min_points": 53,
+      "grade_label": "2+",
+      "grade_value": 1.7
+    },
+    {
+      "min_points": 50,
+      "grade_label": "2",
+      "grade_value": 2.0
+    },
+    {
+      "min_points": 47,
+      "grade_label": "2-",
+      "grade_value": 2.3
+    },
+    {
+      "min_points": 43,
+      "grade_label": "3+",
+      "grade_value": 2.7
+    },
+    {
+      "min_points": 40,
+      "grade_label": "3",
+      "grade_value": 3.0
+    },
+    {
+      "min_points": 37,
+      "grade_label": "3-",
+      "grade_value": 3.3
+    },
+    {
+      "min_points": 33,
+      "grade_label": "4+",
+      "grade_value": 3.7
+    },
+    {
+      "min_points": 30,
+      "grade_label": "4",
+      "grade_value": 4.0
+    },
+    {
+      "min_points": 27,
+      "grade_label": "4-",
+      "grade_value": 4.3
+    },
+    {
+      "min_points": 20,
+      "grade_label": "5+",
+      "grade_value": 4.7
+    },
+    {
+      "min_points": 13,
+      "grade_label": "5",
+      "grade_value": 5.0
+    },
+    {
+      "min_points": 7,
+      "grade_label": "5-",
+      "grade_value": 5.3
+    },
+    {
+      "min_points": 0,
+      "grade_label": "6",
+      "grade_value": 6.0
+    }
+  ]
+}

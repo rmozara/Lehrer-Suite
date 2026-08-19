@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
+  <meta name="theme-color" content="#f2f5f7">
+  <title>{% block title %}SE-Collector{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css?v={{ version }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <main class="page">
+    {% block content %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

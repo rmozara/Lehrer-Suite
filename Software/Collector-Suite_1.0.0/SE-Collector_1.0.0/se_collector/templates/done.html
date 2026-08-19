@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Abgabe gespeichert{% endblock %}
+{% block content %}
+<section class="panel narrow success-panel result-panel">
+  <div class="success-mark">✓</div>
+  <h1>Abgabe gespeichert</h1>
+  <p>Deine Selbstevaluation wurde verbindlich übernommen.</p>
+  <div class="result-total"><span>Gesamtpunktzahl</span><strong>{{ total }} / {{ form.max_points }}</strong></div>
+  <div class="result-grade"><span>Selbstevaluationsnote</span><strong>{{ "%.1f"|format(grade_value)|replace('.', ',') }}</strong><small>Notenstufe {{ grade_label }}</small></div>
+  <div class="result-sections">
+    {% for section in form.sections %}
+    <div><span>{{ section.title }}</span><strong>{{ section_totals[section.id] }} / {{ section.max_points }}</strong></div>
+    {% endfor %}
+  </div>
+  <p class="muted">Du kannst dieses Browserfenster jetzt schließen.</p>
+</section>
+{% endblock %}
+{% block scripts %}<script>localStorage.removeItem("se-draft-{{ session.public_token }}-{{ student.public_token }}");</script>{% endblock %}

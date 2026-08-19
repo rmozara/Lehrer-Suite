@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Präsentationsansicht{% endblock %}
+{% block content %}
+<main class="display-page"><section class="panel">
+  <div class="eyebrow">SE-Collector · Klassenraum</div>
+  {% if progress %}
+    <h1>Sitzungscode {{ progress.session.session_code }}</h1>
+    <p class="display-count"><strong>{{ progress.submitted }} / {{ progress.total }}</strong> Abgaben</p>
+    <p class="muted">Diese Seite zeigt absichtlich keine Namen, Punkte oder Noten.</p>
+    <script>setTimeout(()=>location.reload(),3000)</script>
+  {% else %}
+    <h1>Sitzung anzeigen</h1>
+    {% if error %}<div class="alert info">Keine geöffnete Sitzung mit diesem Code gefunden.</div>{% endif %}
+    <form method="get" action="/anzeige">
+      <label for="session_code">Sechsstelliger Sitzungscode</label>
+      <input id="session_code" name="session_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required autofocus>
+      <div class="form-actions"><button class="button primary" type="submit">Anzeigen</button></div>
+    </form>
+  {% endif %}
+</section></main>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}{{ progress.session.class_id }} · {{ progress.session.period_id }}{% endblock %}
+{% block content %}
+<section class="panel presentation-link">
+  <h2>Präsentationsansicht am Smartboard</h2>
+  <p>Am Smartboard im Browser <code>{{ settings.base_url }}/anzeige</code> öffnen und dort den Sitzungscode eingeben. Diese Ansicht zeigt keine Namen, Punkte oder Noten.</p>
+</section>
+<header class="admin-header workbook-header">
+  <div>
+    <div class="eyebrow">Selbstevaluation</div>
+    <h1>{{ progress.session.class_id }} · {{ progress.session.period_id }}</h1>
+    <p class="subtitle">{% if progress.session.active %}<span class="badge active">Sitzung geöffnet</span>{% else %}<span class="badge closed">Sitzung geschlossen</span>{% endif %}</p>
+  </div>
+  <div class="admin-actions">
+    <a class="button" href="/admin">Übersicht</a>
+  </div>
+</header>
+{% if new %}<div class="alert success">Neue Sitzung angelegt.</div>{% endif %}
+{% if message %}<div class="alert info">{{ message }}</div>{% endif %}
+
+{% if not progress.session.active %}
+<div class="alert warning"><strong>Diese Sitzung ist geschlossen.</strong> Es sind keine weiteren Abgaben möglich. Ergebnisse, ODS und Ausgabeblätter können weiterhin angesehen oder erzeugt werden.</div>
+{% endif %}
+
+{% if progress.session.active %}
+<div class="live-status-line" aria-live="polite">
+  <span class="live-dot" aria-hidden="true"></span>
+  <span id="live-status-text">Abgabestatus wird automatisch aktualisiert.</span>
+  <span id="live-updated-time">Zuletzt aktualisiert: gerade eben</span>
+</div>
+{% endif %}
+
+<div class="summary-cards">
+  <div class="summary summary-green"><strong id="count-submitted">{{ progress.submitted }}</strong><span>abgegeben</span></div>
+  <div class="summary summary-yellow"><strong id="count-open">{{ progress.open }}</strong><span>offen</span></div>
+  <div class="summary summary-blue"><strong id="count-total">{{ progress.total }}</strong><span>gesamt</span></div>
+</div>
+
+{% if progress.session.active %}
+<section class="panel access-modes">
+  <h2>Zugang für die SuS</h2>
+  <div class="vpn-reminder"><strong>Vor dem Scannen:</strong> Mit dem Klassen-WLAN verbinden und VPN ausschalten.</div>
+
+  <div class="access-mode-grid">
+    <div class="access-mode direct-access direct-access-centered">
+      <div class="eyebrow">Direktmodus</div>
+      <h3>Persönliche QR-Karte scannen</h3>
+      {% if settings.direct_mode_enabled %}
+        <p>Danach diesen sechsstelligen Sitzungscode eingeben:</p>
+        <div class="session-code-large">{{ progress.session.session_code }}</div>
+        <p class="muted">Persönliche QR-Karten verwenden: <code>{{ settings.direct_base_url }}</code></p>
+      {% else %}
+        <div class="alert info">Direktmodus ist noch nicht eingerichtet. Die feste Direktadresse wird in der Übersicht eingetragen.</div>
+      {% endif %}
+    </div>
+
+    {% if settings.direct_mode_enabled %}
+      <details class="fallback-details">
+        <summary>Ausweichweg: Zwei-QR-Modus anzeigen</summary>
+        <div class="access-mode two-qr-access fallback-content">
+          <div class="eyebrow">Ausweichweg</div>
+          <h3>Zwei-QR-Modus mit Bildauswahl</h3>
+          <p><strong>1.</strong> Gemeinsamen Sitzungs-QR scannen.</p>
+          <img class="qr-session" src="/admin/qr/session/{{ progress.session.id }}.png" alt="Gemeinsamer Sitzungs-QR-Code">
+          <p><code>{{ settings.base_url }}/access/{{ progress.session.public_token }}</code></p>
+          <p><strong>2.</strong> Persönliche QR-Karte mit der normalen Kamera fotografieren, zum Browser zurückkehren und das Foto auswählen.</p>
+          <p class="muted">Der QR darf zusammen mit Teilen der Karte oder des Blatts fotografiert sein. Dieser Weg benötigt kein HTTPS.</p>
+        </div>
+      </details>
+    {% else %}
+      <div class="access-mode two-qr-access two-qr-open">
+        <div class="eyebrow">Verfügbarer Zugang</div>
+        <h3>Zwei-QR-Modus mit Bildauswahl</h3>
+        <p><strong>1.</strong> Gemeinsamen Sitzungs-QR scannen.</p>
+        <img class="qr-session" src="/admin/qr/session/{{ progress.session.id }}.png" alt="Gemeinsamer Sitzungs-QR-Code">
+        <p><code>{{ settings.base_url }}/access/{{ progress.session.public_token }}</code></p>
+        <p><strong>2.</strong> Persönliche QR-Karte mit der normalen Kamera fotografieren, zum Browser zurückkehren und das Foto auswählen.</p>
+        <p class="muted">Der QR darf zusammen mit Teilen der Karte oder des Blatts fotografiert sein. Dieser Weg benötigt kein HTTPS.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+<section class="panel">
+  <h2>Ergebnisse sichern und ausgeben</h2>
+  <p class="muted">Beim Erzeugen der Ausgabeblätter werden Ergebnisse, Klasse und Sitzungsdatum automatisch in die ODS übernommen.</p>
+  <div class="admin-actions">
+    <form method="post" action="/admin/session/{{ progress.session.id }}/output-pdf">
+      <button class="button primary" type="submit">Ausgabeblätter als PDF</button>
+    </form>
+    <form method="post" action="/admin/session/{{ progress.session.id }}/write-ods">
+      <button class="button secondary" type="submit">Ergebnisse in ODS übernehmen</button>
+    </form>
+    <a class="button secondary" href="/admin/download-ods">ODS herunterladen</a>
+  </div>
+</section>
+
+<section class="panel split-panel">
+  <div>
+    <details class="secondary-device-details">
+      <summary>Abgabestand auf Zweitgerät anzeigen</summary>
+      <div class="secondary-device-content">
+        <p>Öffnet eine reduzierte Anzeige ohne Namen oder Ergebnisse.</p>
+        <p><code>{{ settings.base_url }}/status/{{ progress.session.public_token }}</code></p>
+        <img class="qr-small" src="/admin/qr/status/{{ progress.session.id }}.png" alt="QR-Code für den Abgabestand auf einem Zweitgerät">
+      </div>
+    </details>
+  </div>
+  <div>
+    <h2>Sitzungssteuerung</h2>
+    <div class="stacked-actions">
+      {% if progress.session.active %}
+      <form method="post" action="/admin/session/{{ progress.session.id }}/close">
+        <button class="button" type="submit">Sitzung schließen</button>
+      </form>
+      {% else %}
+      <form method="post" action="/admin/session/{{ progress.session.id }}/reopen">
+        <button class="button primary" type="submit">Sitzung erneut öffnen</button>
+      </form>
+      {% endif %}
+      <form method="post" action="/admin/session/{{ progress.session.id }}/reset" onsubmit="return confirm('Alle Abgaben dieser Sitzung löschen und mit einem neuen Sitzungscode neu starten?');">
+        <button class="button warning" type="submit">Sitzung leeren und neu starten</button>
+      </form>
+      {% if not progress.session.active %}<form method="post" action="/admin/session/{{ progress.session.id }}/archive">
+        <button class="button secondary" type="submit">Sitzung archivieren</button>
+      </form>{% endif %}
+    </div>
+    <p class="muted">„Leeren“ behält Klasse und Zeitraum bei. Die ODS-Datei wird erst durch „aktualisieren“ überschrieben; vorher entsteht automatisch eine Sicherung.</p>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Abgabestatus</h2>
+  <div class="table-wrap">
+    <table class="workbook-table">
+      <thead><tr><th>Nr.</th><th>Name</th><th>Schüler-ID</th><th>Status</th><th>Zeit</th><th>Punkte</th><th>Selbsteval.</th><th>Aktion</th></tr></thead>
+      <tbody id="student-status-rows">
+        {% include "session_students_rows.html" %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+{% if progress.session.active %}
+<script>
+  window.SE_SESSION_LIVE_URL = "/admin/session/{{ progress.session.id }}/live";
+</script>
+<script src="/static/session_admin.js?v={{ version }}" defer></script>
+{% endif %}
+{% endblock %}

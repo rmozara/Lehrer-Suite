@@ -1,0 +1,25 @@
+SE · SELBSTEVALUATION 1.0.0
+===========================
+
+PROGRAMMORDNER
+Dieser Ordner enthält SE. Unterrichtsdaten nicht hier ablegen.
+
+VORBEREITUNG
+1. Außerhalb der Suite einen persönlichen Arbeitsordner für Klasse und Thema wählen.
+2. Selbstevaluation.ods beim ersten Start automatisch anlegen lassen oder aus
+   templates unter demselben Namen dorthin kopieren.
+3. Namensliste, Schüler-IDs, Fach und Parameter kontrollieren.
+4. Persönliche Jahreskarten und Lehrerpasswort zuvor in QR einrichten.
+
+START
+Linux:  ./run_on_linux.sh
+Windows: run_on_windows.bat doppelklicken
+
+Anschließend diesen Arbeitsordner auswählen. Die Lehreroberfläche öffnet sich
+unter http://127.0.0.1:8765/admin.
+
+ABLAUF
+Sitzung anlegen → öffnen → Sitzungscode anzeigen → Abgaben beobachten →
+schließen → ODS aktualisieren und Auswertung erzeugen.
+
+Ausführliche Hinweise stehen in README.md.

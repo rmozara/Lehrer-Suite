@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Sitzungsstatus{% endblock %}
+{% block head %}<meta http-equiv="refresh" content="5">{% endblock %}
+{% block content %}
+<section class="status-board">
+  <div class="eyebrow">{{ progress.session.class_id }} · {{ progress.session.period_id }}</div>
+  <h1>Selbstevaluation</h1>
+  <div class="status-number">{{ progress.submitted }} / {{ progress.total }}</div>
+  <p>Abgaben eingegangen</p>
+  {% if progress.session.active %}<div class="badge active">Sitzung geöffnet</div>{% else %}<div class="badge closed">Sitzung geschlossen</div>{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% for student in students %}
+<tr data-student-id="{{ student.id }}">
+  <td>{{ student.list_position }}</td>
+  <td>{{ student.name }}</td>
+  <td>{{ student.student_id }}</td>
+  <td>{% if student.submitted_at %}<span class="badge active">abgegeben</span>{% else %}<span class="badge waiting">offen</span>{% endif %}</td>
+  <td>{{ student.submitted_at or "–" }}</td>
+  <td>{{ (student.total_points|string) ~ " / 66" if student.submitted_at else "–" }}</td>
+  <td>{% if student.submitted_at %}{{ "%.1f"|format(student.grade_value)|replace('.', ',') }} <span class="muted">({{ student.grade_label }})</span>{% else %}–{% endif %}</td>
+  <td>{% if student.submitted_at and progress.session.active %}<form method="post" action="/admin/session/{{ progress.session.id }}/reopen/{{ student.id }}"><button class="button small" type="submit">Erneut freigeben</button></form>{% endif %}</td>
+</tr>
+{% endfor %}

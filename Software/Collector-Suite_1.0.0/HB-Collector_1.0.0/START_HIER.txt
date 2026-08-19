@@ -1,0 +1,25 @@
+HB · HEFTERBEWERTUNG 1.0.0
+==========================
+
+PROGRAMMORDNER
+Dieser Ordner enthält HB. Unterrichtsdaten nicht hier ablegen.
+
+VORBEREITUNG
+1. Außerhalb der Suite einen persönlichen Arbeitsordner für Klasse und Thema wählen.
+2. Hefterbewertung.ods beim ersten Start automatisch anlegen lassen oder aus
+   templates unter demselben Namen dorthin kopieren.
+3. Namensliste, Schüler-IDs und Fach in der ODS eintragen.
+4. Persönliche Jahreskarten und Lehrerpasswort zuvor in QR einrichten.
+
+START
+Linux:  ./run_on_linux.sh
+Windows: run_on_windows.bat doppelklicken
+
+Anschließend diesen Arbeitsordner auswählen. Die Lehreroberfläche öffnet sich
+unter http://127.0.0.1:8765/admin.
+
+ABLAUF
+Selbstbewertung → zufällige Zuordnung → Peerbewertung → Lehrerprüfung →
+Rückmeldebögen und ODS-Aktualisierung.
+
+Ausführliche Hinweise stehen in README.md.

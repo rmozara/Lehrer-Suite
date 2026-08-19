@@ -1,0 +1,58 @@
+# Lokale Python-Umgebungen und Caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editor-, IDE- und Betriebssystemdateien
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# LibreOffice-Sperrdateien
+.~lock.*#
+
+# Gemeinsame personenbezogene Laufzeitdaten und lokale Einstellungen
+/Collector-Daten/identities.sqlite3
+/Collector-Daten/identities.sqlite3-*
+/Collector-Daten/generator_settings.json
+/Collector-Daten/teacher_settings.json
+/Collector-Daten/Collector-Sicherungen/
+
+# Komponenten-Datenbanken und lokale Einstellungen
+/HB-Collector_1.0.0/data/
+/SE-Collector_1.0.0/data/*
+!/SE-Collector_1.0.0/data/.gitkeep
+
+# Standard-Arbeitsbereiche und lokal erzeugte Nutzdaten
+/QR-Ausgaben/
+/SE-Collector_1.0.0/Arbeitsordner/
+/HB-Collector_1.0.0/Hefterbewertung.ods
+**/.hb-collector-workspace
+**/SE-Collector-Sicherungen/
+**/HB-Collector-Sicherungen/
+**/Sicherungen/
+/Upgrade-Sicherungen/
+
+# Erzeugte Ausgaben, Datenbanken, Sicherungen und temporäre Dateien
+*.pdf
+!/Beispiel-Durchlauf/**/*.pdf
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+*.bak
+*.backup
+*.tmp
+*.temp
+*.log

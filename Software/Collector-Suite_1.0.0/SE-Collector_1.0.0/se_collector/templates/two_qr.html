@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Zwei-QR-Zugang{% endblock %}
+{% block content %}
+<section class="panel narrow join-panel two-qr-panel">
+  <div class="worksheet-subject">{{ session.class_id }} · {{ session.period_id }}</div>
+  <h1>Zwei-QR-Zugang</h1>
+  <div class="alert info"><strong>Persönliche QR-Karte:</strong> Gib den Sitzungscode ein und fotografiere anschließend den QR-Code auf deiner QR-Karte.</div>
+  <ol class="two-qr-steps">
+    <li>Gib den sechsstelligen Sitzungscode ein, der im Klassenraum angezeigt wird.</li>
+    <li>Tippe auf „Kamera öffnen“. Je nach Handy öffnet sich direkt die Kamera oder die Bildauswahl.</li>
+    <li>Fotografiere den persönlichen QR-Code möglichst gerade und nah. Falls du die normale Kamera-App verwendest, kehre anschließend zu dieser Seite zurück und wähle das Foto aus.</li>
+    <li>Danach öffnet sich automatisch deine Selbstevaluation.</li>
+  </ol>
+  {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+
+  <form id="qrPhotoForm" method="post" action="/access/{{ session.public_token }}/scan" enctype="multipart/form-data">
+    <label for="session_code_photo">Sitzungscode</label>
+    <input class="session-input" id="session_code_photo" name="session_code" inputmode="numeric"
+           pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required>
+    <label class="camera-button button secondary full" for="qr_image">Kamera öffnen</label>
+    <input class="camera-input" id="qr_image" name="qr_image" type="file" accept="image/*" capture="environment" required>
+    <button class="button primary full camera-submit" id="qrSubmit" type="submit" disabled>QR auswerten</button>
+  </form>
+  <p class="muted camera-help">Das Foto wird nur an den lokalen Lehrer-Laptop übertragen, dort ausgewertet und nicht gespeichert.</p>
+  <hr>
+  <p><strong>Falls die Kamera den QR nicht erkennt:</strong> Gib den
+  achtstelligen persönlichen Code ein, der unter dem QR steht.</p>
+  <form method="post" action="/access/{{ session.public_token }}/code">
+    <label for="session_code_manual">Sitzungscode</label>
+    <input class="session-input" id="session_code_manual" name="session_code" inputmode="numeric"
+           pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required>
+    <label for="personal_code">Persönlicher Code</label>
+    <input id="personal_code" name="personal_code" minlength="8" maxlength="8"
+           autocomplete="off" autocapitalize="characters" required>
+    <button class="button primary full" type="submit">Öffnen</button>
+  </form>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+(() => {
+  const input = document.getElementById('qr_image');
+  const button = document.getElementById('qrSubmit');
+  const form = document.getElementById('qrPhotoForm');
+  if (!input || !button || !form) return;
+  input.addEventListener('change', () => {
+    button.disabled = !input.files || input.files.length === 0;
+    if (!button.disabled) {
+      button.textContent = 'QR wird gelesen …';
+      setTimeout(() => form.requestSubmit(), 50);
+    }
+  });
+  form.addEventListener('submit', () => {
+    button.disabled = true;
+    button.textContent = 'QR wird gelesen …';
+  });
+})();
+</script>
+{% endblock %}

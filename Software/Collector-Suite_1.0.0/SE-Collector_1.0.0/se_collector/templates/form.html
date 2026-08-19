@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{{ form.subtitle }}{% endblock %}
+{% block content %}
+<div class="student-form-page">
+  <header class="worksheet-header form-header">
+    <div>
+      <div class="worksheet-subject">{{ form.subject }}</div>
+      <h1>{{ form.title }}</h1>
+      <div class="worksheet-subtitle">{{ form.subtitle }}</div>
+      <div class="student-meta">{{ session.class_id }} · {{ session.period_id }} · Schüler-ID {{ student.student_id }}</div>
+    </div>
+    <div class="progress-box"><span id="answeredCount">0</span> / 22</div>
+  </header>
+
+  <div class="worksheet-intro">{{ form.intro }}</div>
+  {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+
+  <form id="evaluationForm" method="post" action="/form/{{ session.public_token }}/{{ student.public_token }}" data-storage-key="se-draft-{{ session.public_token }}-{{ student.public_token }}">
+    {% set ns = namespace(n=0) %}
+    {% for section in form.sections %}
+    <section class="section-block">
+      <div class="section-heading">
+        <h2>{{ section.title }}</h2>
+        <span>max. {{ section.max_points }} Punkte</span>
+      </div>
+      <div class="question-list">
+      {% for q in section.questions %}
+      {% set ns.n = ns.n + 1 %}
+      <article class="question-card" id="card-{{ q.id }}">
+        <div class="question-title">
+          <span class="question-number">{{ ns.n }}</span>
+          <h3>{{ q.text }}</h3>
+        </div>
+        <div class="options" role="radiogroup" aria-label="{{ q.text }}">
+          {% for option in form.scale %}
+          <label class="option">
+            <input type="radio" name="{{ q.id }}" value="{{ option.value }}" required {% if answers and answers.get(q.id)|string == option.value|string %}checked{% endif %}>
+            <span><b>{{ option.label }}</b><small>{{ option.points_label }}</small></span>
+          </label>
+          {% endfor %}
+        </div>
+      </article>
+      {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+
+    <section class="submit-panel">
+      <h2>Verbindlich abgeben</h2>
+      <p>Punkte und Note werden erst nach dem Absenden angezeigt.</p>
+      <div id="missingMessage" class="alert info" aria-live="polite">Noch 22 Aussagen offen.</div>
+      <label class="confirm-row">
+        <input type="checkbox" id="confirmFinal">
+        <span>Ich habe meine Antworten geprüft und möchte sie verbindlich absenden.</span>
+      </label>
+      <button class="button primary full" id="submitButton" type="submit" disabled>Verbindlich absenden</button>
+    </section>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/form.js?v={{ version }}"></script>{% endblock %}

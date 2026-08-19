@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}QR-Karte {{ class_id }}{% endblock %}
+{% block content %}
+<header class="workbook-header"><div class="eyebrow">Ausweichhilfe</div><h1>QR-Karte anzeigen</h1><p class="subtitle">Nur für SuS, die ihre persönliche QR-Karte vergessen haben.</p></header>
+<section class="panel narrow scan-card-view">
+  <form method="get">
+    <label for="student_token">Schülerin oder Schüler</label>
+    <select id="student_token" name="student_token" onchange="this.form.submit()">
+      <option value="" {% if not student %}selected{% endif %}>Bitte auswählen</option>
+      {% for item in students %}<option value="{{ item.public_token }}" {% if student and item.public_token == student.public_token %}selected{% endif %}>{{ item.list_position }} · {{ item.name }}</option>{% endfor %}
+    </select>
+    <noscript><button class="button" type="submit">Anzeigen</button></noscript>
+  </form>
+  {% if student %}<div class="replacement-card"><h2>{{ student.name }}</h2><p>Schüler-ID {{ student.student_id }}</p><img src="/admin/qr/student/{{ student.public_token }}.png" alt="Persönlicher QR-Code"><p><strong>Am Schülergerät scannen.</strong></p><p class="muted">Mit dem Klassen-WLAN verbinden und VPN ausschalten.</p></div>{% endif %}
+  <p><a class="button secondary" href="/admin">Zur Lehrerübersicht</a></p>
+</section>
+{% endblock %}

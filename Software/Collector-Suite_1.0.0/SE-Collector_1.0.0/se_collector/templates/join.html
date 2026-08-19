@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Sitzungscode{% endblock %}
+{% block content %}
+<section class="panel narrow join-panel">
+  <div class="worksheet-subject">{{ form.subject }}</div>
+  <h1>{{ form.title }}</h1>
+  <div class="worksheet-subtitle">{{ form.subtitle }}</div>
+  <p class="id-confirmed">Persönliche QR-Karte erkannt · Schüler-ID {{ student.student_id }}</p>
+  <p>Gib den sechsstelligen Sitzungscode ein, den deine Lehrkraft zeigt.</p>
+  {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+  <form method="post" action="/p/{{ student.public_token }}/join">
+    <label for="session_code">Sitzungscode</label>
+    <input class="session-input" id="session_code" name="session_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required autofocus>
+    <button class="button primary full" type="submit">Weiter</button>
+  </form>
+</section>
+{% endblock %}

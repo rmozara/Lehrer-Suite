@@ -1,0 +1,20 @@
+{
+  "title": "Hefterbewertung",
+  "scale": {
+    "1": "nicht erfüllt",
+    "2": "teilweise erfüllt",
+    "3": "weitgehend erfüllt",
+    "4": "erfüllt"
+  },
+  "criteria": [
+    {"id": "beschriftung", "label": "Auf dem Hefter stehen Name, Klasse oder Kurs und Fach."},
+    {"id": "zustand", "label": "Der Hefter ist sauber und ordentlich gehalten und weist keine vermeidbaren Beschädigungen auf."},
+    {"id": "struktur", "label": "Die Inhalte sind in der richtigen Reihenfolge. Datum und Überschriften zeigen, was zu welcher Stunde gehört."},
+    {"id": "ablage", "label": "Arbeitsblätter und andere lose Materialien sind an der passenden Stelle eingeheftet oder eingeklebt."},
+    {"id": "vollstaendigkeit", "label": "Alle Arbeitsblätter, Mitschriften und anderen Materialien aus dem Bewertungszeitraum sind vorhanden."},
+    {"id": "bearbeitung", "label": "Die Aufgaben und Arbeitsaufträge aus dem Unterricht sind bearbeitet."},
+    {"id": "darstellungen", "label": "Zeichnungen, Diagramme und Tabellen sind gut erkennbar und vollständig beschriftet."},
+    {"id": "lesbarkeit", "label": "Mitschriften, Lösungen und andere eigene Texte sind gut lesbar."},
+    {"id": "abgabe", "label": "Der Hefter wurde zum vereinbarten Termin abgegeben."}
+  ]
+}
